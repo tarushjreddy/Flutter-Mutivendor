@@ -1,11 +1,19 @@
 class GroceryItem {
+  final String id;
   final String name;
   final String description;
   final double price;
   final String imagePath;
+  final String vendorId;
+  final double qty;
 
   GroceryItem(
-      {this.name, this.description = "Trending!!", this.price, this.imagePath});
+      {this.id,this.name, this.description = "Trending!!", this.price, this.imagePath,this.vendorId,this.qty});
+
+   Map<String,dynamic> toJson()  {
+     return {'_id':this.id,'name':this.name,'price':this.price,'imgurl':this.imagePath,'vendorid':this.vendorId,'qty':this.qty};
+  }
+
 }
 
 var demoItems = [

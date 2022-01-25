@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/grocery_item.dart';
 import 'package:grocery_app/screens/home/home_feed_modal.dart';
+import 'package:grocery_app/screens/home/viewmodel.dart';
 import 'package:grocery_app/screens/location/map.dart';
 import 'package:grocery_app/screens/product_details/product_details_screen.dart';
 import 'package:grocery_app/styles/colors.dart';
@@ -18,94 +19,108 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _address;
+  HomeViewModel homevm=HomeViewModel();
+  Future items;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    items=homevm.getItems();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          child: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 15,
-                  ),
-                  SvgPicture.asset("assets/icons/app_icon_color.svg"),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  padded(GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MapScreen()))
-                            .then((value) {
-                          setState() {
-                            _address = value;
-                          }
-                        });
-                      },
-                      child: locationWidget())),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  padded(SearchBarWidget()),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  padded(HomeBanner()),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  getHorizontalItemSlider(exclusiveOffers),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  getHorizontalItemSlider(bestSelling),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    height: 105,
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        SizedBox(
-                          width: 20,
+          child: FutureBuilder(
+            future: items,
+            builder: (context, snapshot) {
+              return SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SvgPicture.asset("assets/icons/app_icon_color.svg"),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      padded(GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MapScreen()))
+                                .then((value) {
+                              setState() {
+                                _address = value;
+                              }
+                            });
+                          },
+                          child: locationWidget())),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      padded(SearchBarWidget()),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      padded(HomeBanner()),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      getHorizontalItemSlider(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      getHorizontalItemSlider(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        height: 105,
+                        child: ListView(
+                          padding: EdgeInsets.zero,
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            SizedBox(
+                              width: 20,
+                            ),
+                            GroceryFeaturedCard(
+                              groceryFeaturedItems[0],
+                              color: Color(0xffF8A44C),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            GroceryFeaturedCard(
+                              groceryFeaturedItems[1],
+                              color: AppColors.primaryColor,
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                          ],
                         ),
-                        GroceryFeaturedCard(
-                          groceryFeaturedItems[0],
-                          color: Color(0xffF8A44C),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        GroceryFeaturedCard(
-                          groceryFeaturedItems[1],
-                          color: AppColors.primaryColor,
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      getHorizontalItemSlider(),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  getHorizontalItemSlider(groceries),
-                  SizedBox(
-                    height: 15,
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            }
           ),
         ),
       ),
@@ -119,29 +134,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget getHorizontalItemSlider(List<GroceryItem> items) {
+  Widget getHorizontalItemSlider() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       height: 250,
-      child: FutureBuilder<List>(
-          future: getData(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView.separated(
+      child: ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              itemCount: items.length,
+              itemCount: homevm.groceries.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    onItemClicked(context, items[index]);
+                    onItemClicked(context, homevm.groceries[index]);
                   },
                   child: GroceryItemCardWidget(
-                    item: snapshot.data[index],
+                    item: homevm.groceries[index],
                   ),
                 );
               },
@@ -150,8 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 20,
                 );
               },
-            );
-          }),
+            )
+          
     );
   }
 

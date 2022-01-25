@@ -78,7 +78,7 @@ class _ChartItemWidgetState extends State<ChartItemWidget> {
                   width: 70,
                   child: AppText(
                     text: "\$${getPrice().toStringAsFixed(2)}",
-                    fontSize: 18,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                     textAlign: TextAlign.right,
                   ),
@@ -93,9 +93,10 @@ class _ChartItemWidgetState extends State<ChartItemWidget> {
   }
 
   Widget imageWidget() {
+    print('adhsb${widget.item.imagePath}');
     return Container(
-      width: 100,
-      child: Image.asset(widget.item.imagePath),
+      width: 90,
+      child: Image.network(widget.item.imagePath),
     );
   }
 

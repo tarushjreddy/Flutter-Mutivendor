@@ -6,7 +6,7 @@ class HomeBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 500,
+      width: MediaQuery.of(context).size.width*0.9,
       height: 115,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -29,12 +29,12 @@ class HomeBanner extends StatelessWidget {
             children: [
               AppText(
                 text: "Fresh Vegetables",
-                fontSize: 22,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
               AppText(
                 text: "Get Up To 40%  OFF",
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: AppColors.primaryColor,
               ),

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
+import 'package:grocery_app/screens/cart/viewModel.dart';
 
 import '../order_failed_dialog.dart';
 
 class CheckoutBottomSheet extends StatefulWidget {
+  final CartViewModel carvm;
+  CheckoutBottomSheet(this.carvm);
+
   @override
   _CheckoutBottomSheetState createState() => _CheckoutBottomSheetState();
 }
@@ -142,7 +146,8 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
     );
   }
 
-  void onPlaceOrderClicked() {
+  void onPlaceOrderClicked()async {
+    await widget.carvm.checkout();
     Navigator.pop(context);
     // showDialog(context: context, child: OrderFailedDialogue());
   }

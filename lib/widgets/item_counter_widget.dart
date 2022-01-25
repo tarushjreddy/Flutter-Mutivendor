@@ -21,11 +21,11 @@ class _ItemCounterWidgetState extends State<ItemCounterWidget> {
             iconColor: AppColors.darkGrey, onPressed: decrementAmount),
         SizedBox(width: 18),
         Container(
-            width: 30,
+            width: 26,
             child: Center(
                 child: getText(
                     text: amount.toString(), fontSize: 18, isBold: true))),
-        SizedBox(width: 18),
+        SizedBox(width: 14),
         iconWidget(Icons.add,
             iconColor: AppColors.primaryColor, onPressed: incrementAmount)
       ],

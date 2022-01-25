@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/grocery_item.dart';
+import 'package:grocery_app/screens/home/viewmodel.dart';
 import 'package:grocery_app/widgets/item_counter_widget.dart';
 
 import 'favourite_toggle_icon_widget.dart';
@@ -20,7 +21,8 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int amount = 1;
-
+  bool isloading=false;
+  HomeViewModel homevm=HomeViewModel();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +62,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                         Spacer(),
                         Text(
-                          "\$${getTotalPrice().toStringAsFixed(2)}",
+                          "\Rs${getTotalPrice().toStringAsFixed(2)}",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -80,8 +82,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       customWidget: ratingWidget(),
                     ),
                     Spacer(),
-                    AppButton(
+                    isloading?CircularProgressIndicator(color: Colors.green,):AppButton(
                       label: "Add To Basket",
+                      onPressed: ()async{
+                        setState(() {
+                          isloading=true;
+                        });
+                        await homevm.addToCart(widget.groceryItem, double.parse(getTotalPrice().toStringAsFixed(2))/widget.groceryItem.price);
+                        setState(() {
+                          isloading=false;
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Added item to cart!!',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),backgroundColor: Colors.green,));
+                      },
                     ),
                     Spacer(),
                   ],
@@ -96,7 +108,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Widget getImageHeaderWidget() {
     return Container(
-      height: 250,
+      height: 240,
       padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
       width: double.maxFinite,
       decoration: BoxDecoration(
@@ -116,7 +128,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             tileMode: TileMode.clamp),
       ),
       child: Image(
-        image: AssetImage(widget.groceryItem.imagePath),
+        image: Image.network(widget.groceryItem.imagePath).image,
       ),
     );
   }

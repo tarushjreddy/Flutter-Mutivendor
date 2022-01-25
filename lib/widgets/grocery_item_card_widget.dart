@@ -74,7 +74,7 @@ class GroceryItemCardWidget extends StatelessWidget {
 
   Widget imageWidget() {
     return Container(
-      child: Image.asset(item.imagePath),
+      child: Image.network(item.imagePath),
     );
   }
 
