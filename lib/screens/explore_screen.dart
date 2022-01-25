@@ -67,7 +67,7 @@ class ExploreScreen extends StatelessWidget {
         CategoryItem categoryItem = e.value;
         return GestureDetector(
           onTap: () {
-            onCategoryItemClicked(context, categoryItem);
+            //onCategoryItemClicked(context, categoryItem);
           },
           child: Container(
             padding: EdgeInsets.all(10),

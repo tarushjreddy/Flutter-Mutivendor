@@ -37,6 +37,19 @@ class _HomeScreenState extends State<HomeScreen> {
           child: FutureBuilder(
             future: items,
             builder: (context, snapshot) {
+
+              if(snapshot.connectionState==ConnectionState.waiting){
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.green,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              }
+
               return SingleChildScrollView(
                 child: Center(
                   child: Column(

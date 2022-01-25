@@ -13,6 +13,7 @@ class CartViewModel{
     final response=await getRequest(CART);
     print(response);
     this.response=response['success'];
+    print(this.response);
     if(response['success']){
       try{this._initialdata=response;}catch(e){print(e);}
       try{

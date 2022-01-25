@@ -34,9 +34,25 @@ class _CartScreenState extends State<CartScreen> {
             future: cart,
             builder: (context, snapshot) {
               if(snapshot.connectionState==ConnectionState.waiting){
-                return Center(child: CircularProgressIndicator(backgroundColor: Colors.green,color:Colors.white));
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: Center(child: CircularProgressIndicator(backgroundColor: Colors.green,color:Colors.white)));
               }
-             
+             if(cartvm.cartItems.length==0){
+               return Container(
+                 height: MediaQuery.of(context).size.height,
+                 child: Center(
+                   child:Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     children: [
+                       Text('Sorry!!'),
+                       Text('No items in Cart. Please add items to cart!')
+                     ],
+                   )
+                 ),
+               );
+             }
               return Column(
                 children: [
                   SizedBox(
@@ -78,7 +94,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   GestureDetector(
                     onTap: ()async{
-                      await cartvm.checkout();
+                      //await cartvm.checkout();
                     },
                     child: getCheckoutButton(context,cartvm))
                 ],
@@ -125,6 +141,11 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: Colors.transparent,
         builder: (BuildContext bc) {
           return CheckoutBottomSheet(cartvm);
+        }).then((value)async{
+          await cartvm.getCartItems();
+          setState(() {
+            
+          });
         });
   }
 
